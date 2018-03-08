@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Votemachine</title>
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+</script>
+<![endif]-->
+<style>
+body {
+    font-family: Verdana,sans-serif;
+    font-size: 0.9em;
+}
+
+header, footer {
+    padding: 10px;
+    color: white;
+    background-color: black;
+}
+
+section {
+    margin: 5px;
+    padding: 10px;
+    background-color: lightgrey;
+}
+
+article {
+    margin: 5px;
+    padding: 10px;
+    background-color: white;
+}
+
+nav ul {
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 5px;
+}
+</style>
+</head>
+
+<header>
+<h1>Miika's votemachine</h1>
+</header>
+{% if user.is_authenticated %}
+	<nav>
+		<ul>
+	  		
+	  		<li><a href="{% url 'home' %}">Home</a></li>
+	  		<li><a href="{% url 'votemachine:voting' %}">Votemachine</a></li>
+			<li><a href="{% url 'votemachine:questionmachine' %}">Questionmachine</a></li>
+			<li><a href="{% url 'votemachine:choicemachine' %}">Choicemachine</a></li>
+			<li><a href="{% url 'admin:index' %}">Admin portal</a></li>
+			<li><a href="{% url 'logout' %}">Logout</a></li>
+	  
+		</ul>
+	</nav>
+	<h3>You are logged in as {{ user.username }}!</h3>
+	{% if latest_question_list %}
+	    
+	    
+	    {% for question in latest_question_list %}
+	    <section>
+	    
+		<h4>{{ question.question_text }}</h4>
+		<!-- 
+	    	<select name="forma" onchange="location = this.value;">
+	    	
+		    	<option>Select action for the question</option>
+				<option value="{% url 'votemachine:detail' question.id %}">Vote for the question </option>
+				<option value="{% url 'votemachine:revote' question.id %}">Or revote </option>
+			    <option value="{% url 'votemachine:deletevote' question.id %}">Or delete your vote </option>
+			    <option value="{% url 'votemachine:voters' question.id %}">Or see who has voted for it </option>
+       		
+     		</select>
+   		 -->
+			<p><a href="{% url 'votemachine:detail' question.id %}">Vote for the question </a></p>
+			<p><a href="{% url 'votemachine:revote' question.id %}">Or revote </a></p>
+		    <p><a href="{% url 'votemachine:deletevote' question.id %}">Or delete your vote </a></p>
+		    <p><a href="{% url 'votemachine:voters' question.id %}">Or see who has voted for it </a></p>
+   		</section>
+	    {% endfor %}
+	    
+	{% else %}
+		<p>You are logged in.</p>
+		<p></p>
+	    <p>No questions are available.</p>
+	    
+	    <p><a href="{% url 'votemachine:createquestion' %}">Add new question</a></p>
+	{% endif %}
+	
+{% else %}
+	<p>You must login first.</p>
+	<p></p>
+	<a href="{% url 'login' %}">Login</a>
+{% endif %}
+
+</body>
+</html>
